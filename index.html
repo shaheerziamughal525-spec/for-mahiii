@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Proclamation for Mahiii</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            font-family: 'Georgia', serif;
+            color: #4a3728;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Envelope Styling */
+        #envelope-container {
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+        #envelope-container:hover { transform: scale(1.1); }
+        
+        .envelope-icon {
+            font-size: 100px;
+            color: #b8860b;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        }
+
+        .tap-text {
+            font-weight: bold;
+            color: #8b6508;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+
+        /* Main Content (Hidden initially, scrolled when visible) */
+        #main-content {
+            display: none;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            margin: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 50;
+        }
+
+        h1 { color: #b8860b; font-size: 2.2em; margin-bottom: 30px; }
+        .poem { font-size: 1.15em; line-height: 1.6; font-style: italic; }
+        
+        /* Hidden poem lines */
+        .line {
+            display: none;
+            margin: 15px 0;
+        }
+
+        #certificate { 
+            display: none; /* Crucial fix: Hidden initially */
+            margin-top: 30px;
+        }
+        #certificate img { 
+            width: 100%; 
+            max-width: 450px;
+            border-radius: 10px; 
+            border: 6px solid #b8860b;
+            margin-top: 20px;
+        }
+
+        /* Heart Animation */
+        .heart {
+            color: #e2a0ac;
+            position: absolute;
+            top: -10px;
+            z-index: 10;
+            animation: heartFall linear infinite;
+        }
+        @keyframes heartFall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="envelope-container" onclick="openMessage()" class="animate__animated animate__bounceIn">
+        <div class="envelope-icon">✉️</div>
+        <div class="tap-text animate__animated animate__pulse animate__infinite">TAP TO OPEN</div>
+    </div>
+
+    <div id="main-content" class="animate__animated">
+        <h1>Eid Mubarak, Mahiii! 🌙</h1>
+        
+        <div class="poem">
+            <p id="l1" class="line animate__animated">To the keeper of secrets and the queen of the tea,</p>
+            <p id="l2" class="line animate__animated">The one who knows <strong>Shiza</strong> better than me.</p>
+            <p id="l3" class="line animate__animated">The fashion consultant, the girl-talk expert,</p>
+            <p id="l4" class="line animate__animated">The one who ensures that no feelings get hurt.</p>
+            <hr class="line" style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            <p id="l5" class="line animate__animated">You’re more than a "bestie"—you’re family now,</p>
+            <p id="l6" class="line animate__animated">To <strong>Mahiii</strong>, the Best Saali, I take a deep bow.</p>
+            <p id="l7" class="line animate__animated">So here is your Eidhi, and here is the truth:</p>
+            <p id="l8" class="line animate__animated">You’re officially the best (and a little bit uncouth!)</p>
+        </div>
+
+        <div id="certificate" class="animate__animated">
+            <h3 style="color:#b8860b; text-decoration: underline;">Your Official Proclamation</h3>
+            
+           <img src="certificate.png" alt="Best Saali Certificate">
+            
+            <p style="font-size: 0.9em; margin-top: 15px; color: #8b6508;"><em>Check your wallet for the Eidhi transaction!</em></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        function openMessage() {
+            // 1. Hide envelope
+            document.getElementById('envelope-container').style.display = 'none';
+            
+            // 2. Show content card
+            const content = document.getElementById('main-content');
+            content.style.display = 'block';
+            content.classList.add('animate__zoomIn');
+
+            // 3. Trigger initial Confetti Burst
+            confetti({
+                particleCount: 200,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#b8860b', '#f2d74e', '#ffffff', '#e2a0ac']
+            });
+
+            // 4. Start Heart Waterfall
+            startHeartSnow();
+
+            // 5. Sequence the Poem Lines
+            showLines();
+        }
+
+        // --- Functions ---
+
+        // Controls the cascade of hearts
+        function startHeartSnow() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️'; // Or use '💖' or '✨'
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+                document.body.appendChild(heart);
+                
+                // Remove hearts after they fall to prevent lag
+                setTimeout(() => { heart.remove(); }, 5000);
+            }, 300); // New heart every 300ms
+        }
+
+        // Reveals poem lines one by one with delays
+        function showLines() {
+            const lines = document.querySelectorAll('.line');
+            const totalLines = lines.length;
+            const certificateDelay = 1500 * totalLines + 500; // Time after last line
+
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    line.style.display = 'block';
+                    line.classList.add('animate__fadeInUp');
+                }, index * 1500); // 1.5 second delay between lines
+            });
+
+            // After all lines are shown, reveal the certificate
+            setTimeout(() => {
+                revealCertificate();
+            }, certificateDelay);
+        }
+
+        // Final surprise reveal
+        function revealCertificate() {
+            const cert = document.getElementById('certificate');
+            cert.style.display = 'block';
+            cert.classList.add('animate__zoomIn'); // Dramatic entrance
+        }
+    </script>
+</body>
+</html>
